@@ -1,0 +1,6 @@
+{
+    "smtpHost": "",
+    "port": 465,
+    "sender": "",
+    "password": ""
+}
