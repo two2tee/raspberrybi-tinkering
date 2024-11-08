@@ -61,7 +61,6 @@ def main():
     lcd.printMessageWithDelay(duration_sec=3, message=f'{email_is_send}', headerText="EmailStatus:")
 
     config = load_config()
-    print(config)
     email_recipients = config["emailRecipients"]
 
     while True:
