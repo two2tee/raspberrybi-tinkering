@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 
 mail_config.json
+mailbox_checker.config.json

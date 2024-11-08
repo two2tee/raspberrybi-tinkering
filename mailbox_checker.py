@@ -3,6 +3,7 @@ from time import sleep
 from datetime import datetime, timedelta
 from hardware.lcd_display import LCD_Display
 from common.mail_client import MailClient
+import json
 
 lcd = LCD_Display(is_backlight=True, is_disabled=True)
 
@@ -17,8 +18,11 @@ mail_client = MailClient(is_send=email_is_send)
 
 ultrasonic = DistanceSensor(echo=19, trigger=26, threshold_distance=dist_threshold)
 
+def load_config():
+    with open("mailbox_checker.config.json", "rt") as configFile:
+        return json.load(configFile)
 
-def send_email():
+def send_email(recipients):
     global last_sent_date
     current_time = datetime.now()
 
@@ -36,12 +40,11 @@ def send_email():
 
     subject = "New post in mailbox!"
 
-    was_sent = mail_client.send_email(subject, body, ["dennisnguyen3000@yahoo.dk"])
+    was_sent = mail_client.send_email(subject, body, recipients)
 
     if was_sent:
         lcd.printMessageWithDelay(duration_sec=5, message='Email sent!', headerText="EmailStatus:")
         last_sent_date = datetime.now()
-
 
 def try_sleep_until_next_check():
     current_time = datetime.now()
@@ -56,10 +59,12 @@ def try_sleep_until_next_check():
 lcd.printMessageWithDelay(duration_sec=3, message="V1.0.0", headerText="Mailbox checker")
 lcd.printMessageWithDelay(duration_sec=3, message=f'{email_is_send}', headerText="EmailStatus:")
 
+config = load_config()
+email_recipients = config["email_recipients"]
 
 while True:
     try_sleep_until_next_check()
     dist = ultrasonic.distance
     lcd.printMessage(f'{dist}', headerText="Distance:")
     if(dist <= dist_threshold):
-        send_email()
+        send_email(email_recipients)
