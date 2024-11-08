@@ -56,16 +56,21 @@ def try_sleep_until_next_check():
 
 ## MAIN
 
-lcd.printMessageWithDelay(duration_sec=3, message="V1.0.0", headerText="Mailbox checker")
-lcd.printMessageWithDelay(duration_sec=3, message=f'{email_is_send}', headerText="EmailStatus:")
+def main():
+    lcd.printMessageWithDelay(duration_sec=3, message="V1.0.0", headerText="Mailbox checker")
+    lcd.printMessageWithDelay(duration_sec=3, message=f'{email_is_send}', headerText="EmailStatus:")
 
-config = load_config()
-print(config)
-email_recipients = config["email_recipients"]
+    config = load_config()
+    print(config)
+    email_recipients = config["emailRecipients"]
 
-while True:
-    try_sleep_until_next_check()
-    dist = ultrasonic.distance
-    lcd.printMessage(f'{dist}', headerText="Distance:")
-    if(dist <= dist_threshold):
-        send_email(email_recipients)
+    while True:
+        try_sleep_until_next_check()
+        dist = ultrasonic.distance
+        lcd.printMessage(f'{dist}', headerText="Distance:")
+        if(dist <= dist_threshold):
+            send_email(email_recipients)
+
+
+if __name__ == "__main__":
+    main()
