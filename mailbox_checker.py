@@ -10,6 +10,7 @@ lcd = LCD_Display(is_backlight=True, is_disabled=True)
 check_frequency_sec_office_hours = 1.5
 check_frequency_sec_off_hours = 30
 dist_threshold = 0.5
+dist_precision = 4
 
 last_sent_date  = None
 email_is_send = False
@@ -65,7 +66,7 @@ def main():
 
     while True:
         try_sleep_until_next_check()
-        dist = ultrasonic.distance
+        dist = round(ultrasonic.distance, dist_precision)
         lcd.printMessage(f'{dist}', headerText="Distance:")
         if(dist <= dist_threshold):
             send_email(email_recipients)
