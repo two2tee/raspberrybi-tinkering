@@ -1,4 +1,4 @@
-from lcd_driver import LcdDriver
+from hardware.lcd_driver import LcdDriver
 import time
 
 class LCD_Display:
