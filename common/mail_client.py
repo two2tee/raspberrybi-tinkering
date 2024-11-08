@@ -1,29 +1,34 @@
 import json
 import smtplib
 import ssl
+import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 
 class MailClient:
     def __init__(self, is_send=True, config_path=""):
         self.is_send = is_send
 
-        config_path = "mail_config.json" if config_path is "" else config_path
-        config_file = open(config_path, "rt")
-        if len(config_file) is 0:
-            raise Exception("config file missing")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(current_dir, "mail_config.json") if config_path == "" else config_path
+        print(config_path)
 
-        self.config = json.loads(config_file)
+        with open(config_path, "rt") as config_file:
+            config_content = config_file.read()
+            if len(config_content) == 0:
+                raise Exception("config file missing")
 
+            self.config = json.loads(config_content)
 
-    def send_email(self, subject: str, body: str, to_emails:[]) -> bool:
+    def send_email(self, subject: str, body: str, to_emails) -> bool:
         if not self.is_send:
             print("email disabled.")
             return True
 
         email_smtp_host = self.config["smtpHost"]
         email_port = self.config["port"]
-        from_email =  self.config["sender"] if from_email is "" else from_email
+        from_email =  self.config["sender"]
         to_emails = self.config["recipients"] if to_emails is [] else to_emails
 
         message = MIMEMultipart()
