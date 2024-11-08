@@ -16,7 +16,7 @@ email_is_send = True
 email_send_timedelta_minutes = 60
 mail_client = MailClient(is_send=email_is_send)
 
-ultrasonic = DistanceSensor(echo=19, trigger=26, threshold_distance=dist_threshold)
+ultrasonic = DistanceSensor(echo=17, trigger=7, threshold_distance=dist_threshold)
 
 def load_config():
     with open("mailbox_checker.config.json", "rt") as configFile:
